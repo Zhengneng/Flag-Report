@@ -8,7 +8,7 @@ from datetime import datetime
 
 #len(df['day'])/20
 
-def cal():
+def data_input_and_calculation():
     # data input and clean
     input_time_start = datetime.now(eastern) #record the start eastern time, for log purpose
     global logList
@@ -70,6 +70,7 @@ def cal():
             ny_time = datetime.now(eastern)
             now = ny_time.strftime("%Y-%m-%d_%I:%M:%S")
             errorList.append(str(e)+' '+str(now))
+            logList.append(str(e)+' '+str()now))
             continue
 
     input_time_end = datetime.now(eastern) #record the end eastern time, for log purpose
@@ -87,7 +88,7 @@ def cal():
     email_sender(MText,subject)
 
 
-def flag():
+def statistics():
     # To see how many consecutive days bad or good
     tag_time_start = datetime.now(eastern) #record the start eastern time, for log purpose
     global count
@@ -99,7 +100,7 @@ def flag():
             if i % 5000 == 0:
                 time_now = datetime.now(eastern)
                 now = time_now.strftime("%Y-%m-%d_%I:%M:%S")
-                logList.append(['Flag rows * 5000', i ,str(now)])
+                logList.append(['statistics rows * 5000', i ,str(now)])
                 with open('/tmp/0604/log_1.csv','wb') as f:
                     writer = csv.writer(f)
                     writer.writerows(logList)
@@ -137,6 +138,7 @@ def flag():
             ny_time = datetime.now(eastern)
             now = ny_time.strftime("%Y-%m-%d_%I:%M:%S")
             errorList.append(str(e)+' '+str(now))
+            logList.append(str(e)+' '+str()now))
             continue
 
     tag_time_end = datetime.now(eastern) #record the end eastern time, for log purpose
@@ -145,16 +147,16 @@ def flag():
 
     if len(errorList) > 0:
         MText = str(runningTime)+'        '.join(errorList)
-        subject = 'Display SSH Flag Error! '
+        subject = 'Display SSH statistics Error! '
             
     else:
         MText = 'Successfully!  Running time: '+str(runningTime)
-        subject = 'Display SSH Flag Success! '
+        subject = 'Display SSH statistics Success! '
     email_sender(MText,subject)
 
 
-def Count():
-    # flag it based to the count days
+def flag():
+    # flag it based on the statistics
     red = 0
     orange = 0
     green = 0
@@ -241,6 +243,7 @@ def writing():
         ny_time = datetime.now(eastern)
         now = ny_time.strftime("%Y-%m-%d_%I:%M:%S")
         errorList.append(str(e)+' '+str(now))
+        logList.append(str(e)+' '+str()now))
         pass
 
 
@@ -311,7 +314,7 @@ if __name__ == "__main__":
     filename = inspect.getfile(inspect.currentframe())
     #len(df['day'])
     df = pd.read_csv('/tmp/0604/0531.csv')
-    cal()
+    data_input_and_calculation()
+    statistics()
     flag()
-    Count()
     writing()
