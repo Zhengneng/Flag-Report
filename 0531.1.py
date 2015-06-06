@@ -9,18 +9,20 @@ from datetime import datetime
 #len(df['day'])/20
 
 def cal():
-    input_time_start = datetime.now(eastern)
+    # data input and clean
+    input_time_start = datetime.now(eastern) #record the start eastern time, for log purpose
     global logList
-    for i in range(0,len(df['day'])/5):
+    for i in range(0,len(df['day'])/5): # first one fifth
         try:
-            if i % 5000 == 0:
-                time_now = datetime.now(eastern)
+            if i % 5000 == 0: # update the log every 5000 rows reading
+                time_now = datetime.now(eastern) # record time
                 now = time_now.strftime("%Y-%m-%d_%I:%M:%S")
                 logList.append(['Read rows * 5000',i,str(now)])
                 with open('/tmp/0604/log_1.csv','wb') as f:
                     writer = csv.writer(f)
                     writer.writerows(logList)
                 f.close()
+            # to see if the combination key (deal type, deal, campaign, domain) is in the dict or not
             if (df.iloc[i,9],df.iloc[i,8],df.iloc[i,1],df.iloc[i,2]) not in domainVCPM.keys():
                 cumCost = float(df.iloc[i,4])
                 cumImp_App = float(df.iloc[i,3])
@@ -70,11 +72,12 @@ def cal():
             errorList.append(str(e)+' '+str(now))
             continue
 
-    input_time_end = datetime.now(eastern)
+    input_time_end = datetime.now(eastern) #record the end eastern time, for log purpose
     now = input_time_end.strftime("%Y-%m-%d_%I:%M:%S")
-    runningTime = input_time_end-input_time_start
+    runningTime = input_time_end-input_time_start # calculate the running time
 
-    if len(errorList) > 0:
+    # send log email
+    if len(errorList) > 0: 
         MText = str(runningTime)+'        '.join(errorList)
         subject = 'Display SSH Cal Error! '
             
@@ -85,8 +88,8 @@ def cal():
 
 
 def flag():
-
-    tag_time_start = datetime.now(eastern)
+    # To see how many consecutive days bad or good
+    tag_time_start = datetime.now(eastern) #record the start eastern time, for log purpose
     global count
     global logList
     i = -1
@@ -136,7 +139,7 @@ def flag():
             errorList.append(str(e)+' '+str(now))
             continue
 
-    tag_time_end = datetime.now(eastern)
+    tag_time_end = datetime.now(eastern) #record the end eastern time, for log purpose
     now = tag_time_end.strftime("%Y-%m-%d_%I:%M:%S")
     runningTime = tag_time_end-tag_time_start
 
@@ -151,12 +154,13 @@ def flag():
 
 
 def Count():
+    # flag it based to the count days
     red = 0
     orange = 0
     green = 0
     light_green = 0
 
-    score_view = [ (v,k) for k,v in result_attention.iteritems() ]
+    score_view = [ (v,k) for k,v in result_attention.iteritems()]
     score_view.sort(reverse=True)
 
     print "=============Attention Ranking==========================="
@@ -216,7 +220,8 @@ def Count():
 
 
 def writing():
-    writing_time_start = datetime.now(eastern)
+    # write data into CSV file
+    writing_time_start = datetime.now(eastern) #record the start eastern time, for log purpose
 
     try:
         path = '/tmp/0604/'
@@ -239,7 +244,7 @@ def writing():
         pass
 
 
-    writing_time_end = datetime.now(eastern)
+    writing_time_end = datetime.now(eastern) #record the end eastern time, for log purpose
     now = writing_time_end.strftime("%Y-%m-%d_%I:%M:%S")
     runningTime = writing_time_end-writing_time_start
 
@@ -254,7 +259,7 @@ def writing():
        
 
 def email_sender(MText,subject):
-
+    # email credential setting
     time_now = datetime.now(eastern)
     now = time_now.strftime("%Y-%m-%d_%I:%M:%S")
     msg = MIMEText(MText, _subtype='html')
@@ -269,6 +274,7 @@ def email_sender(MText,subject):
 
 
 def CSV_writer(result, Path, File, countType):
+    # CSV writing setting
     count = 0
     wList = []
     wList.append(["Deal Type","Deal","Campaigns","Domains","vCPM","CPM","Viewability","Spend","Impressions","Measureable Imp","Viewable Imp"])
@@ -288,8 +294,8 @@ def CSV_writer(result, Path, File, countType):
 if __name__ == "__main__":
     to_list=["qiuzhengneng@gmail.com"]
     host="smtp.gmail.com:587"
-    username='*********@gmail.com'
-    password='********'
+    username='groupm.usa@gmail.com'
+    password='4987thave'
     attention = {}
     record_attention = {}
     record_well = {}
