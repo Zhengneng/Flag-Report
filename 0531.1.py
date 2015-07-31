@@ -298,7 +298,7 @@ if __name__ == "__main__":
     to_list=["qiuzhengneng@gmail.com"]
     host="smtp.gmail.com:587"
     username='groupm.usa@gmail.com'
-    password='4987thave'
+    password='******'
     attention = {}
     record_attention = {}
     record_well = {}
